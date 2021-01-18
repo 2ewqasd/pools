@@ -10,7 +10,7 @@ from .models import SuggestedAnswer
 from .serializers import PoolSerializer
 from .serializers import PoolExtendentSerializer
 from .serializers import PoolAnswersSerializer
-
+from .serializers import AnsweredPoolSerializer
 
 class PoolViewSet(viewsets.ReadOnlyModelViewSet):
     """
@@ -76,3 +76,15 @@ class PoolViewSet(viewsets.ReadOnlyModelViewSet):
             answer.delete()
         return Response({'Error': message},
                          status=status.HTTP_400_BAD_REQUEST)
+
+
+class AnsweredPoolsViewSet(viewsets.ViewSet):
+    """
+    A simple ViewSet for viewing answered pools.
+    """
+    def list(self, request, user_id):
+        pools_pk = Answer.objects.filter(user_id=user_id).values_list('question__pool', flat=True).distinct()
+        queryset = Pool.objects.filter(pk__in=pools_pk)
+        serializer = AnsweredPoolSerializer(queryset, many=True, context={'request': request,
+                                                                          'user_id': user_id})
+        return Response(serializer.data)

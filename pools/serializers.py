@@ -37,6 +37,25 @@ class AnswerSerializer(serializers.ModelSerializer):
         fields = ['question', 'chosen_answers', 'text_answer']
 
 
+class DetailAnswerSerializer(serializers.ModelSerializer):
+    chosen_answers_list = SuggestedAnswerSerializer(source='chosen_answers', many=True)
+    class Meta:
+        model = Answer
+        fields = ['question', 'chosen_answers_list', 'text_answer']
+
+
 class PoolAnswersSerializer(serializers.Serializer):
     uid = serializers.IntegerField()
     answers = AnswerSerializer(many=True)
+
+
+class AnsweredPoolSerializer(serializers.HyperlinkedModelSerializer):
+    answers = serializers.SerializerMethodField('get_answers')
+    class Meta:
+        model = Pool
+        fields = ['url', 'id', 'name', 'start_date', 'end_date', 'answers']
+
+    def get_answers(self, obj):
+        answers = Answer.objects.filter(user_id=self.context.get("user_id"))
+        return DetailAnswerSerializer(answers, many=True).data
+        return True

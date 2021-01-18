@@ -14,7 +14,7 @@ class Pool(models.Model):
     """
     name = models.CharField(max_length=256,
                             help_text="Pool name")
-    start_date = models.DateTimeField(editable=False,
+    start_date = models.DateTimeField(auto_now_add=True,
                                       help_text="Pool start date")
     end_date = models.DateTimeField(help_text="Pool end date")
 

@@ -3,7 +3,7 @@ from rest_framework import serializers
 from .models import Pool
 from .models import Question
 from .models import SuggestedAnswer
-
+from .models import Answer
 
 class PoolSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -29,3 +29,14 @@ class PoolExtendentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Pool
         fields = ['url', 'id', 'name', 'start_date', 'end_date', 'questions']
+
+
+class AnswerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Answer
+        fields = ['question', 'chosen_answers', 'text_answer']
+
+
+class PoolAnswersSerializer(serializers.Serializer):
+    uid = serializers.IntegerField()
+    answers = AnswerSerializer(many=True)

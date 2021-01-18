@@ -1,7 +1,7 @@
 django==2.2.10
 djangorestframework
 pyyaml
-psycopg2-binary
+# psycopg2-binary
 uritemplate
-django-heroku
-gunicorn
+# django-heroku
+# gunicorn

@@ -2,6 +2,7 @@ from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from django.utils import timezone
 
 from .models import Pool
 from .models import Question
@@ -17,7 +18,8 @@ class PoolViewSet(viewsets.ReadOnlyModelViewSet):
     """
     A simple ViewSet for viewing pools.
     """
-    queryset = Pool.objects.all()
+    def get_queryset(self):
+        return Pool.objects.filter(start_date__lte=timezone.now()).filter(end_date__gte=timezone.now())
 
     def get_serializer_class(self):
         if self.action == 'list':

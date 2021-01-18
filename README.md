@@ -1,0 +1,1 @@
+Objective: to design and develop an API for a user polling system.

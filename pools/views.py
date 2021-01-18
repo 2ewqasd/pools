@@ -12,6 +12,7 @@ from .serializers import PoolExtendentSerializer
 from .serializers import PoolAnswersSerializer
 from .serializers import AnsweredPoolSerializer
 
+
 class PoolViewSet(viewsets.ReadOnlyModelViewSet):
     """
     A simple ViewSet for viewing pools.
@@ -32,7 +33,7 @@ class PoolViewSet(viewsets.ReadOnlyModelViewSet):
             user_id = serializer.data['uid']
             if Answer.objects.filter(question__pool=pk, user_id=user_id):
                 return Response({'Error': 'Already answered'},
-                                 status=status.HTTP_400_BAD_REQUEST)
+                                status=status.HTTP_400_BAD_REQUEST)
             answers = []
             question_set = []
             for answer in serializer.data['answers']:
@@ -75,7 +76,7 @@ class PoolViewSet(viewsets.ReadOnlyModelViewSet):
         for answer in answers:
             answer.delete()
         return Response({'Error': message},
-                         status=status.HTTP_400_BAD_REQUEST)
+                        status=status.HTTP_400_BAD_REQUEST)
 
 
 class AnsweredPoolsViewSet(viewsets.ViewSet):

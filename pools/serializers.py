@@ -61,6 +61,7 @@ class AnsweredPoolSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['url', 'id', 'name', 'start_date', 'end_date', 'answers']
 
     def get_answers(self, obj):
-        answers = Answer.objects.filter(user_id=self.context.get("user_id"))
+        answers = Answer.objects.filter(user_id=self.context.get("user_id"),
+                                        question__pool__pk=obj.pk)
         return DetailAnswerSerializer(answers, many=True).data
         return True
